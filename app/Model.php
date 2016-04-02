@@ -26,8 +26,7 @@ class Model
         $result = mysql_query($sql, $this->conexion);
 
         $alimentos = array();
-        while ($row = mysql_fetch_assoc($result))
-        {
+        while ($row = mysql_fetch_assoc($result)) {
             $alimentos[] = $row;
         }
 
@@ -39,14 +38,105 @@ class Model
         $nombre = htmlspecialchars($nombre);
 
         $sql = "select * from alimentos where nombre like '"
-               . $nombre .
+               . mysql_real_escape_string($nombre) .
                "' order by energia desc";
 
         $result = mysql_query($sql, $this->conexion);
 
         $alimentos = array();
-        while ($row = mysql_fetch_assoc($result))
-        {
+        while ($row = mysql_fetch_assoc($result)) {
+            $alimentos[] = $row;
+        }
+
+        return $alimentos;
+    }
+
+    public function buscarAlimentosPorEnergia($energia)
+    {
+        $energia = htmlspecialchars($energia);
+
+        $sql = "select * from alimentos where energia like '"
+               . mysql_real_escape_string($energia) .
+               "' order by energia desc";
+
+        $result = mysql_query($sql, $this->conexion);
+
+        $alimentos = array();
+        while ($row = mysql_fetch_assoc($result)) {
+            $alimentos[] = $row;
+        }
+
+        return $alimentos;
+    }	 
+
+    public function buscarAlimentosCombinada($nombre,$energia,$proteina,$hc,$fibra,$grasa)
+    {
+        $nombre = htmlspecialchars($nombre);
+        $energia = htmlspecialchars($energia);
+        $proteina = htmlspecialchars($proteina);
+        $hc = htmlspecialchars($hc);
+        $fibra = htmlspecialchars($fibra);
+        $grasa = htmlspecialchars($grasa);
+        $sql = "select * from alimentos ";
+        $where = '';
+
+        if ($nombre != '') {
+            $where = $where ."where nombre like '" .
+                     mysql_real_escape_string($nombre);
+        }
+        if ($energia != '') {
+            if ($where != '') {
+                $where = $where ." and energia like '" . 
+                        mysql_real_escape_string($energia) . "' ";
+            } else {
+                $where = $where ."where energia like '" . 
+                        mysql_real_escape_string($energia) . "' ";
+            }	
+        }
+
+        if ($proteina != '') {
+            if ($where != '') {
+                $where = $where ." and proteina like '" . 
+                        mysql_real_escape_string($proteina) ."' ";
+            } else {
+                $where = $where ."where proteina like '" . 
+                        $proteina ."' ";
+            }
+        }
+        if ($hc != '') {
+            if ($where != '') {
+                $where = $where ." and hidratocarbono like '" .
+                        mysql_real_escape_string($hc) . "' ";
+            } else {
+                $where = $where ."where hidratocarbono like '" .
+                        mysql_real_escape_string($hc) . "' ";
+            }
+        }
+        if ($fibra != '') {
+            if ($where != '') {
+                    $where = $where ." and fibra like '". 
+                            mysql_real_escape_string($fibra) ."' ";
+            } else {
+                    $where = $where ."where fibra like '". 
+                            mysql_real_escape_string($fibra) ."' ";
+            }
+        }
+        if ($grasa != '') {
+            if ($where != '') {
+                $where = $where ." and grasatotal like '" .
+                        mysql_real_escape_string($grasa) ."' ";
+            } else {
+                $where = $where ."where grasatotal like '" .
+                        mysql_real_escape_string($grasa) ."' ";
+            }		
+        }
+
+        $query = $sql.$where;
+        echo $query;
+        $result = mysql_query($query, $this->conexion);
+
+        $alimentos = array();
+        while ($row = mysql_fetch_assoc($result)) {
             $alimentos[] = $row;
         }
 
@@ -57,7 +147,7 @@ class Model
     {
         $id = htmlspecialchars($id);
 
-        $sql = "select * from alimentos where id=".$id;
+        $sql = "select * from alimentos where id = " . $id;
 
         $result = mysql_query($sql, $this->conexion);
 
@@ -78,7 +168,12 @@ class Model
 
         $sql = "insert into alimentos (nombre, energia, proteina,
                 hidratocarbono, fibra, grasatotal) values ('" .
-                $n . "'," . $e . "," . $p . "," . $hc . "," . $f . "," . $g . ")";
+                mysql_real_escape_string($n) . "'," . 
+                mysql_real_escape_string($e) . "," . 
+                mysql_real_escape_string($p) . "," . 
+                mysql_real_escape_string($hc) . "," . 
+                mysql_real_escape_string($f) . "," . 
+                mysql_real_escape_string($g) . ")";
 
         $result = mysql_query($sql, $this->conexion);
 

@@ -122,9 +122,10 @@ class Controller
                         $params['energia']  = $_POST['energia'];
                         $params['proteina'] = $_POST['proteina'];
                         $params['hc']       = $_POST['hc'];
+                        $params['fibra']    = $_POST['fibra'];
                         $params['grasa']    = $_POST['grasa'];
-            $params['resultado'] = $m->buscarAlimentosCombinada($_POST['nombre'],$_POST['energia'],
-                                                                $_POST['proteina'],$_POST['hc'],$_POST['grasa']);
+            $params['resultado'] = $m->buscarAlimentosCombinada($_POST['nombre'],$_POST['energia'],$_POST['proteina'],
+                                                                $_POST['hc'],$_POST['fibra'],$_POST['grasa']);
         }
 
         require __DIR__ . '/templates/buscarCombinada.php';
